@@ -8,6 +8,9 @@
 
         <class>me.shockyng.library.api.data.models.Book</class>
         <class>me.shockyng.library.api.data.models.Author</class>
+        <class>me.shockyng.library.api.data.models.Person</class>
+        <class>me.shockyng.library.api.data.models.ContactType</class>
+        <class>me.shockyng.library.api.data.models.Contact</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
