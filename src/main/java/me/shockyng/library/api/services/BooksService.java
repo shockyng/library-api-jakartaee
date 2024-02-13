@@ -7,23 +7,30 @@ import me.shockyng.library.api.daos.BooksDAO;
 import me.shockyng.library.api.data.dtos.BookDTO;
 import me.shockyng.library.api.data.dtos.BookWithAuthorsDTO;
 import me.shockyng.library.api.data.mappers.BookMapper;
+import me.shockyng.library.api.data.mappers.PeopleMapper;
 import me.shockyng.library.api.data.models.Book;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
 public class BooksService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BooksService.class);
+    private final BookMapper bookMapper = BookMapper.INSTANCE;
+
     @Inject
     private BooksDAO dao;
 
-    private final BookMapper bookMapper = BookMapper.INSTANCE;
 
     public BookDTO createBook(@Valid BookDTO bookDTO) {
+        LOGGER.info("Parse BookDTO to Book");
         Book bookToSave = bookMapper.dtoToEntity(bookDTO);
-        return bookMapper.entityToDto(dao.save(bookToSave));
+        Book savedBook = dao.save(bookToSave);
+        LOGGER.info("Parse Book to BookDTO");
+        return bookMapper.entityToDto(savedBook);
     }
 
     public List<BookDTO> getAllBooks() {
@@ -33,10 +40,13 @@ public class BooksService {
     }
 
     public BookDTO getBookById(Long id) {
-        return bookMapper.entityToDto(dao.findOneById(id));
+        Book foundBook = dao.findOneById(id);
+        LOGGER.info("Parse BookDTO to Book");
+        return bookMapper.entityToDto(foundBook);
     }
 
     public BookDTO updateBook(Long id, BookDTO bookDTO) {
+        LOGGER.info("Create entity based on the received dto");
         Book book = Book.builder()
                 .id(id)
                 .name(bookDTO.name())
@@ -45,7 +55,10 @@ public class BooksService {
                 .description(bookDTO.description())
                 .build();
 
-        return bookMapper.entityToDto(dao.save(book));
+        Book savedBook = dao.save(book);
+
+        LOGGER.info("Parse saved book to dto and return it");
+        return bookMapper.entityToDto(savedBook);
     }
 
     public void deleteBook(Long id) {
