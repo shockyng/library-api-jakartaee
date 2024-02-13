@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "BOOKS")
-public class Book implements Serializable {
+public class Book {
 
     @Id
     @Column(name = "BOOK_ID", updatable = false, unique = true, nullable = false)
